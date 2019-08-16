@@ -7,6 +7,23 @@ using System.Collections.Generic;
 
 namespace CSharpAdvanceDesignTests
 {
+    public static class LinqExtention
+    {
+        public static List<TResource> JoeyWhere<TResource>(List<TResource> resources, Func<TResource, bool> predicate)
+        {
+            var output = new List<TResource>();
+            foreach (var item in resources)
+            {
+                if (predicate(item))
+                {
+                    output.Add(item);
+                }
+            }
+
+            return output;
+        }
+    }
+
     [TestFixture()]
     public class JoeyWhereTests
     {
@@ -25,7 +42,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhere(products, product => product.Price > 200 && product.Price < 500);
+            var actual = LinqExtention.JoeyWhere(products, product => product.Price > 200 && product.Price < 500);
 
             var expected = new List<Product>
             {
@@ -53,7 +70,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = JoeyWhere(products, product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
+            var actual = LinqExtention.JoeyWhere(products, product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
 
             var expected = new List<Product>
             {
@@ -75,7 +92,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"},
             };
 
-            var actual = JoeyWhere(employees, e => e.FirstName.Length < 5);
+            var actual = LinqExtention.JoeyWhere(employees, e => e.FirstName.Length < 5);
 
             var expected = new List<Employee>
             {
@@ -84,21 +101,6 @@ namespace CSharpAdvanceDesignTests
             };
 
             expected.ToExpectedObject().ShouldMatch(actual);
-        }
-
-
-        private List<TResource> JoeyWhere<TResource>(List<TResource> resources, Func<TResource, bool> predicate)
-        {
-            var output = new List<TResource>();
-            foreach (var item in resources)
-            {
-                if (predicate(item))
-                {
-                    output.Add(item);
-                }
-            }
-
-            return output;
         }
     }
 }
