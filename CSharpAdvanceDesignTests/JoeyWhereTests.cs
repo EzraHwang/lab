@@ -1,9 +1,10 @@
-﻿using ExpectedObjects;
+﻿using System;
+using ExpectedObjects;
+using Lab;
 using Lab.Entities;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
-using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -37,7 +38,6 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-
         [Test]
         public void find_products_that_price_between_200_and_500_and_cost_less_than_30()
         {
@@ -63,7 +63,6 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-
         [Test]
         public void Find_the_first_name_length_less_than_5()
         {
@@ -83,6 +82,15 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"},
             };
 
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        [Test]
+        public void find_the_first_one_and_skip_second_one_and_take_other_positive_numbers()
+        {
+            var numbers = new List<int> { 1, 2, 3, 4, -5 };
+            var actual = numbers.JoeyWhereWithIndex((number, index) => number > 0 && index != 1);
+            var expected = new List<int> { 1, 3, 4 };
             expected.ToExpectedObject().ShouldMatch(actual);
         }
     }
