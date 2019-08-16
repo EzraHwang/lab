@@ -101,21 +101,21 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = products
-                .JoeyWhere(product => product.Price > 700)
-                .JoeySelect(p => $"{p.Id}-{p.Price}");
+            //var actual = products
+            //    .JoeyWhere(product => product.Price > 700)
+            //    .JoeySelect(p => $"{p.Id}-{p.Price}");
 
-            foreach (var item in actual)
-            {
-                Console.WriteLine(item);
-            }
-            var expected = new[]
-            {
-                "7-710",
-                "8-780",
-            };
+            //foreach (var item in actual)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            //var expected = new[]
+            //{
+            //    "7-710",
+            //    "8-780",
+            //};
 
-            expected.ToExpectedObject().ShouldMatch(actual);
+            //expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         private static string Map(string url, int index)
