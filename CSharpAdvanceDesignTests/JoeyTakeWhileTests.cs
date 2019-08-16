@@ -1,4 +1,5 @@
-﻿using ExpectedObjects;
+﻿using System;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Linq;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyTakeWhileTests
     {
         [Test]
@@ -23,7 +23,7 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Normal, Point = 6},
             };
 
-            var actual = JoeyTakeWhile(cards);
+            var actual = JoeyTakeWhile(cards, card => card.Kind != CardKind.Separate);
 
             var expected = new List<Card>
             {
@@ -35,9 +35,21 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
         }
 
-        private IEnumerable<Card> JoeyTakeWhile(IEnumerable<Card> cards)
+        private IEnumerable<Card> JoeyTakeWhile(IEnumerable<Card> cards, Func<Card, bool> predicate)
         {
-            throw new System.NotImplementedException();
+            var enumerator = cards.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var card = enumerator.Current;
+                if (predicate(card))
+                {
+                    yield return card;
+                }
+                else
+                {
+                    yield break;
+                }
+            }
         }
     }
 }
