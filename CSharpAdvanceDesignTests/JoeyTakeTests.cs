@@ -14,7 +14,7 @@ namespace CSharpAdvanceDesignTests
         {
             var employees = GetEmployees();
 
-            var actual = JoeyTake(employees);
+            var actual = JoeyTake(employees, 2);
 
             var expected = new List<Employee>
             {
@@ -25,16 +25,40 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees)
+        [Test]
+        public void take_3_employees()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+                new Employee {FirstName = "Mike", LastName = "Chang"},
+                new Employee {FirstName = "Joseph", LastName = "Yao"},
+            };
+
+            var actual = JoeyTake(employees,  3);
+
+            var expected = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees, int count)
         {
             var enumerator = employees.GetEnumerator();
             var index = 0;
-            while (enumerator.MoveNext() && index < 2)
+            while (enumerator.MoveNext() && index < count)
             {
                 yield return enumerator.Current;
                 index++;
             }
         }
+
 
         private static IEnumerable<Employee> GetEmployees()
         {
