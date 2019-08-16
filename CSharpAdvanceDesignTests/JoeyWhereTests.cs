@@ -9,7 +9,7 @@ namespace CSharpAdvanceDesignTests
 {
     public static class LinqExtention
     {
-        public static List<TResource> JoeyWhere<TResource>(List<TResource> resources, Func<TResource, bool> predicate)
+        public static List<TResource> JoeyWhere<TResource>(this List<TResource> resources, Func<TResource, bool> predicate)
         {
             var output = new List<TResource>();
             foreach (var item in resources)
@@ -42,7 +42,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = LinqExtention.JoeyWhere(products, product => product.Price > 200 && product.Price < 500);
+            var actual = products.JoeyWhere(product => product.Price > 200 && product.Price < 500);
 
             var expected = new List<Product>
             {
@@ -70,7 +70,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            var actual = LinqExtention.JoeyWhere(products, product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
+            var actual = products.JoeyWhere(product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
 
             var expected = new List<Product>
             {
@@ -92,7 +92,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"},
             };
 
-            var actual = LinqExtention.JoeyWhere(employees, e => e.FirstName.Length < 5);
+            var actual = employees.JoeyWhere(e => e.FirstName.Length < 5);
 
             var expected = new List<Employee>
             {
