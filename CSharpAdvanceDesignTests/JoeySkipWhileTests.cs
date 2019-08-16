@@ -1,4 +1,5 @@
-﻿using ExpectedObjects;
+﻿using System;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
@@ -24,7 +25,7 @@ namespace CSharpAdvanceDesignTests
                 new Card {Kind = CardKind.Separate},
             };
 
-            var actual = JoeySkipWhile(cards);
+            var actual = JoeySkipWhile(cards, card => card.Kind != CardKind.Separate);
 
             var expected = new List<Card>
             {
@@ -37,19 +38,58 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldEqual(actual.ToList());
         }
 
-        private IEnumerable<Card> JoeySkipWhile(IEnumerable<Card> cards)
+
+        [Test]
+        public void skip_cards_when_point_less_than_5()
+        {
+            var cards = new List<Card>
+            {
+                new Card {Kind = CardKind.Normal, Point = 2},
+                new Card {Kind = CardKind.Normal, Point = 3},
+                new Card {Kind = CardKind.Normal, Point = 4},
+                new Card {Kind = CardKind.Separate},
+                new Card {Kind = CardKind.Normal, Point = 5},
+                new Card {Kind = CardKind.Normal, Point = 6},
+                new Card {Kind = CardKind.Separate},
+            };
+
+            var actual = JoeySkipWhilePointLessThan5(cards, card => (card.Point < 5));
+
+            var expected = new List<Card>
+            {
+                new Card {Kind = CardKind.Normal, Point = 5},
+                new Card {Kind = CardKind.Normal, Point = 6},
+                new Card {Kind = CardKind.Separate},
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        private IEnumerable<Card> JoeySkipWhilePointLessThan5(IEnumerable<Card> cards, Func<Card, bool> predicate)
         {
             var enumerator = cards.GetEnumerator();
-            var isSkip = false;
+            var isTake = false;
             while (enumerator.MoveNext())
             {
                 var card = enumerator.Current;
-                if (card.Kind == CardKind.Separate)
+                if (!predicate(card) || isTake)
                 {
-                    isSkip = true;
+                    isTake = true;
+                    yield return card;
                 }
-                if (isSkip)
+            }
+        }
+
+        private IEnumerable<Card> JoeySkipWhile(IEnumerable<Card> cards, Func<Card, bool> predicate)
+        {
+            var enumerator = cards.GetEnumerator();
+            var isTake = false;
+            while (enumerator.MoveNext())
+            {
+                var card = enumerator.Current;
+                if (!(predicate(card)) || isTake)
                 {
+                    isTake = true;
                     yield return card;
                 }
             }
