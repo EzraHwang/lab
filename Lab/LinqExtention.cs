@@ -7,27 +7,28 @@ namespace Lab
 {
     public static class LinqExtention
     {
-        public static IEnumerable<TResource> JoeyWhere<TResource>(this IEnumerable<TResource> resources, Func<TResource, bool> predicate)
+        public static List<TResource> JoeyWhere<TResource>(this List<TResource> resources, Func<TResource, bool> predicate)
         {
-            var enumerator = resources.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var item = enumerator.Current;
-                if (predicate(item))
-                {
-                    yield return item;
-                }
-            }
-            //var output = new List<TResource>();
-            //foreach (var item in resources)
+            //var enumerator = resources.GetEnumerator();
+            //while (enumerator.MoveNext())
             //{
+            //    var item = enumerator.Current;
             //    if (predicate(item))
             //    {
-            //        output.Add(item);
+            //        yield return item;
             //    }
             //}
 
-            //return output;
+            var output = new List<TResource>();
+            foreach (var item in resources)
+            {
+                if (predicate(item))
+                {
+                    output.Add(item);
+                }
+            }
+
+            return output;
         }
 
         public static IEnumerable<TSource> JoeyWhereWithIndex<TSource>(this IEnumerable<TSource> numbers, Func<TSource, int, bool> predicate)
