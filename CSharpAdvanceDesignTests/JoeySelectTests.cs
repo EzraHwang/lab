@@ -17,7 +17,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls);
+            var actual = JoeySelect(urls, url => url.Replace("http://", "https://"));
             var expected = new List<string>
             {
                 "https://tw.yahoo.com",
@@ -49,21 +49,22 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<string> JoeySelectWithPort(IEnumerable<string> urls)
         {
-            var result = new List<string>();
-            foreach (var url in urls)
-            {
-                result.Add(url.Replace(".com", ".com:9191"));
-            }
+            return JoeySelect(urls, url => $"{url}:9191");
+            //var result = new List<string>();
+            //foreach (var url in urls)
+            //{
+            //    result.Add($"{url}:9191");
+            //}
 
-            return result;
+            //return result;
         }
 
-        private IEnumerable<string> JoeySelect(IEnumerable<string> urls)
+        private IEnumerable<string> JoeySelect(IEnumerable<string> urls, Func<string, string> seletor)
         {
             var result = new List<string>();
             foreach (var url in urls)
             {
-                result.Add(url.Replace("http://", "https://"));
+                result.Add(seletor(url));
             }
 
             return result;
