@@ -101,5 +101,32 @@ namespace Lab
             }
             return false;
         }
+
+        public static TSource JoeyLastOrDefault<TSource>(this IEnumerable<TSource> source)
+        {
+            var enumerator = source.GetEnumerator();
+            var result = default(TSource);
+            while (enumerator.MoveNext())
+            {
+                result = enumerator.Current;
+            }
+
+            return result;
+        }
+
+        public static TSource JoeyLastOrDefaultWithCondition<TSource>(this IEnumerable<TSource> employees, Func<TSource, bool> predicate)
+        {
+            var enumerator = employees.GetEnumerator();
+            var result = default(TSource);
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                if (predicate(item))
+                {
+                    result = enumerator.Current;
+                }
+            }
+            return result;
+        }
     }
 }
