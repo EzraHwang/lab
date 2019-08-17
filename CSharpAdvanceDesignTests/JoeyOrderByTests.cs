@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class CombineKeyCompare
+    public class CombineKeyCompare : IComparer<Employee>
     {
         public CombineKeyCompare(Func<Employee, string> firstKeySelector, IComparer<string> firstKeyComparer)
         {
@@ -18,9 +18,9 @@ namespace CSharpAdvanceDesignTests
         public Func<Employee, string> FirstKeySelector { get; private set; }
         public IComparer<string> FirstKeyComparer { get; private set; }
 
-        public int Compare(Employee currentElement, Employee minElement)
+        public int Compare(Employee x, Employee y)
         {
-            return FirstKeyComparer.Compare(FirstKeySelector(currentElement), FirstKeySelector(minElement));
+            return FirstKeyComparer.Compare(FirstKeySelector(x), FirstKeySelector(y));
         }
     }
 
@@ -62,7 +62,9 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees, new CombineKeyCompare(employee => employee.LastName, Comparer<string>.Default), employee => employee.FirstName, Comparer<string>.Default);
+            var actual = JoeyOrderByLastNameAndFirstName(employees, new CombineKeyCompare(
+                employee => employee.LastName, Comparer<string>.Default),
+                employee => employee.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -75,7 +77,7 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees, CombineKeyCompare combineKeyCompare,
+        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees, IComparer<Employee> combineKeyCompare,
             Func<Employee, string> secondKeySelector,
             IComparer<string> secondKeyComparer)
         {
