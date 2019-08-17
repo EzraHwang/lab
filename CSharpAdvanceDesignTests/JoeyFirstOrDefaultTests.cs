@@ -22,12 +22,7 @@ namespace CSharpAdvanceDesignTests
         private Employee JoeyFirstOrDefault(IEnumerable<Employee> employees)
         {
             var enumerator = employees.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                return enumerator.Current;
-            }
-
-            return null;
+            return enumerator.MoveNext() ? enumerator.Current : null;
         }
     }
 }
