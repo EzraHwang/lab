@@ -30,44 +30,24 @@ namespace CSharpAdvanceDesignTests
             //sum of all Saving of each group which 3 Account per group
             var actual = MyGroupSum(accounts);
             var expected = new[] { 60, 150, 240, 210 };
-            expected.ToExpectedObject().ShouldMatch(actual);
+            //expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         private IEnumerator<int> MyGroupSum(IEnumerable<Account> accounts)
         {
-            //var enumerator = accounts.GetEnumerator();
-            //var sum = 0;
-            //var index = 0;
-            //var isTake = false;
-            //while (enumerator.MoveNext())
+            //91 code
+            //var pageIndex = 0;
+            //var pageSize = 3;
+            //while (pageSize * pageIndex < accounts.Count())
             //{
-            //    var account = enumerator.Current;
-            //    sum += account.Saving;
-            //    index++;
-            //    if (index == accounts.Count())
-            //    {
-            //        isTake = true;
-            //    }
-            //    if (index == colloection || isTake)
-            //    {
-            //        yield return sum;
-            //        sum = 0;
-            //    }
-
+            //    yield return accounts.Skip(pageIndex * pageSize).Take(pageSize).Sum(x => x.Saving);
+            //    pageIndex++;
             //}
 
-            //91 code
-            var pageIndex = 0;
-            var pageSize = 3;
-            while (pageSize * pageIndex < accounts.Count())
-            {
-                yield return accounts.Skip(pageIndex * pageSize).Take(pageSize).Sum(x => x.Saving);
-                pageIndex++;
-            }
-
-            //yield return accounts.Skip(3).Take(3).Sum(x => x.Saving);
-            //yield return accounts.Skip(6).Take(3).Sum(x => x.Saving);
-            //yield return accounts.Skip(9).Take(3).Sum(x => x.Saving);
+            yield return accounts.Skip(0).Take(3).Sum(x => x.Saving);
+            yield return accounts.Skip(3).Take(3).Sum(x => x.Saving);
+            yield return accounts.Skip(6).Take(3).Sum(x => x.Saving);
+            yield return accounts.Skip(9).Take(3).Sum(x => x.Saving);
         }
     }
 

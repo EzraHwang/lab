@@ -6,20 +6,19 @@ using System.Collections.Generic;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyAnyTests
     {
         [Test]
         public void three_employees()
         {
-            var emptyEmployees = new Employee[]
+            var Employees = new Employee[]
             {
                 new Employee(),
                 new Employee(),
                 new Employee(),
             };
 
-            var actual = JoeyAny(emptyEmployees);
+            var actual = JoeyAny(Employees);
             Assert.IsTrue(actual);
         }
 
@@ -36,7 +35,7 @@ namespace CSharpAdvanceDesignTests
 
         private bool JoeyAny(IEnumerable<Employee> employees)
         {
-            throw new NotImplementedException();
+            return employees.GetEnumerator().MoveNext();
         }
     }
 }
