@@ -1,12 +1,13 @@
-﻿using ExpectedObjects;
+﻿using System;
+using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyOrderByTests
     {
         [Test]
@@ -20,7 +21,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastName(employees);
+            var actual = JoeyOrderByLastNameAndFirstName(employees, currentElement => currentElement.LastName, Comparer<string>.Default, currentElement1 => currentElement1.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -30,12 +31,72 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Wang"},
             };
 
+            //expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        [Test]
+        public void orderBy_lastName_and_firstName()
+        {
+            var employees = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+            };
+
+            var actual = JoeyOrderByLastNameAndFirstName(employees,
+                employee => employee.LastName,
+                Comparer<string>.Default,
+                employee => employee.FirstName,
+                Comparer<string>.Default);
+
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+            };
+
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastName(IEnumerable<Employee> employees)
+        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees,
+            Func<Employee, string> firstKeySelector,
+            IComparer<string> firstKeyComparer,
+            Func<Employee, string> secondKeySelector,
+            IComparer<string> secondKeyComparer)
         {
-            throw new System.NotImplementedException();
+            //bubble sort
+            var elements = employees.ToList();
+            while (elements.Any())
+            {
+                var minElement = elements[0];
+                var index = 0;
+                for (int i = 1; i < elements.Count; i++)
+                {
+                    var currentElement = elements[i];
+                    var firstCompareResult = firstKeyComparer.Compare(firstKeySelector(currentElement), firstKeySelector(minElement));
+                    if (firstCompareResult < 0)
+                    {
+                        minElement = currentElement;
+                        index = i;
+                    }
+                    else if (firstCompareResult == 0)
+                    {
+                        var secondCompareResult = secondKeyComparer.Compare(secondKeySelector(currentElement), secondKeySelector(minElement));
+                        if (secondCompareResult < 0)
+                        {
+                            minElement = currentElement;
+                            index = i;
+                        }
+                    }
+                }
+
+                elements.RemoveAt(index);
+                yield return minElement;
+            }
         }
     }
 }
