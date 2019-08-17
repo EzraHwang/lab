@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Lab.Entities;
 
 namespace Lab
 {
     public static class LinqExtention
     {
+        public static bool IsEmpty<TSource>(this IEnumerable<TSource> sources)
+        {
+            return !sources.Any();
+        }
+
         public static List<TResource> JoeyWhere<TResource>(this List<TResource> resources, Func<TResource, bool> predicate)
         {
             //var enumerator = resources.GetEnumerator();
@@ -80,6 +86,20 @@ namespace Lab
             }
 
             return result;
+        }
+
+        public static bool JoeyAnyWithCondition(this IEnumerable<int> source, Func<int, bool> predicate)
+        {
+            var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var item = enumerator.Current;
+                if (predicate(item))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
