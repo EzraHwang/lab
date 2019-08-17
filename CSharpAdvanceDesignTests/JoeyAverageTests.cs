@@ -1,11 +1,13 @@
 ﻿using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
+using System.Linq;
+using ExpectedObjects;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture()]
-    [Ignore("not yet")]
     public class JoeyAverageTests
     {
         [Test]
@@ -15,12 +17,26 @@ namespace CSharpAdvanceDesignTests
 
             var actual = JoeyAverage(numbers);
 
-            //var expected = ?
+            var expected = 4d;
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         private double? JoeyAverage(IEnumerable<int?> numbers)
         {
-            throw new System.NotImplementedException();
+            var enumerator = numbers.GetEnumerator();
+            var result = default(double);
+            var index = 0;
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (current.HasValue)
+                {
+                    result += current.Value;
+                    index++;
+                }
+            }
+
+            return result / index;
         }
     }
 }
