@@ -7,9 +7,9 @@ using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
-    public class combineKeyCompare
+    public class CombineKeyCompare
     {
-        public combineKeyCompare(Func<Employee, string> firstKeySelector, IComparer<string> firstKeyComparer)
+        public CombineKeyCompare(Func<Employee, string> firstKeySelector, IComparer<string> firstKeyComparer)
         {
             FirstKeySelector = firstKeySelector;
             FirstKeyComparer = firstKeyComparer;
@@ -33,7 +33,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees, new combineKeyCompare(currentElement => currentElement.LastName, Comparer<string>.Default), currentElement1 => currentElement1.FirstName, Comparer<string>.Default);
+            var actual = JoeyOrderByLastNameAndFirstName(employees, new CombineKeyCompare(currentElement => currentElement.LastName, Comparer<string>.Default), currentElement1 => currentElement1.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -57,7 +57,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees, new combineKeyCompare(employee => employee.LastName, Comparer<string>.Default), employee => employee.FirstName, Comparer<string>.Default);
+            var actual = JoeyOrderByLastNameAndFirstName(employees, new CombineKeyCompare(employee => employee.LastName, Comparer<string>.Default), employee => employee.FirstName, Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -70,7 +70,7 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees, combineKeyCompare combineKeyCompare,
+        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(IEnumerable<Employee> employees, CombineKeyCompare combineKeyCompare,
             Func<Employee, string> secondKeySelector,
             IComparer<string> secondKeyComparer)
         {
@@ -83,7 +83,7 @@ namespace CSharpAdvanceDesignTests
                 for (int i = 1; i < elements.Count; i++)
                 {
                     var currentElement = elements[i];
-                    var firstCompareResult = combineKeyCompare.FirstKeyComparer.Compare(combineKeyCompare.FirstKeySelector(currentElement), combineKeyCompare.FirstKeySelector(minElement));
+                    var firstCompareResult = Compare(combineKeyCompare, currentElement, minElement);
                     if (firstCompareResult < 0)
                     {
                         minElement = currentElement;
@@ -103,6 +103,11 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
+        }
+
+        private static int Compare(CombineKeyCompare combineKeyCompare, Employee currentElement, Employee minElement)
+        {
+            return combineKeyCompare.FirstKeyComparer.Compare(combineKeyCompare.FirstKeySelector(currentElement), combineKeyCompare.FirstKeySelector(minElement));
         }
     }
 }
