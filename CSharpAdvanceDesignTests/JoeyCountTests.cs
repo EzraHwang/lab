@@ -4,7 +4,6 @@ using System.Collections.Generic;
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture]
-    [Ignore("not yet")]
     public class JoeyCountTests
     {
         [Test]
@@ -19,7 +18,19 @@ namespace CSharpAdvanceDesignTests
 
         private int JoeyCount(IEnumerable<int> numbers)
         {
-            throw new System.NotImplementedException();
+            if (numbers is ICollection<int> n)
+            {
+                return n.Count;
+            }
+
+            var enumerator = numbers.GetEnumerator();
+            var index = 0;
+            while (enumerator.MoveNext())
+            {
+                index++;
+            }
+
+            return index;
         }
     }
 }
