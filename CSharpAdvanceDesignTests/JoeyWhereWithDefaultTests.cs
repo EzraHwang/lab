@@ -4,11 +4,12 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
     [TestFixture()]
-    [Ignore("not yet")]
     public class JoeyWhereWithDefaultTests
     {
         [Test]
@@ -34,7 +35,13 @@ namespace CSharpAdvanceDesignTests
         private IEnumerable<Employee> WhereWithDefault(IEnumerable<Employee> employees, Func<Employee, bool> predicate,
             Employee defaultEmployee)
         {
-            throw new NotImplementedException();
+            var result = employees.Where(predicate);
+            return result.IsEmpty() ? DefaultEmployee(defaultEmployee) : result;
+        }
+
+        private static IEnumerable<Employee> DefaultEmployee(Employee defaultEmployee)
+        {
+            yield return defaultEmployee;
         }
     }
 }
