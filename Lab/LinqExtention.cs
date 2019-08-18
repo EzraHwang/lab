@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,6 +7,54 @@ using Lab.Entities;
 
 namespace Lab
 {
+    public class MyBuilder : IEnumerable<Employee>
+    {
+        private IEnumerable<Employee> _employees;
+        private IComparer<Employee> _comboComparer;
+
+        public MyBuilder(IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
+        {
+            _employees = employees;
+            _comboComparer = comboComparer;
+        }
+
+        private static IEnumerator<Employee> Sort(IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
+        {
+            //_comboComparer = comboComparer;
+            //_employees = employees;
+            var elements = employees.ToList();
+
+            while (elements.Any())
+            {
+                var minElement = elements[0];
+                var index = 0;
+                for (var i = 1; i < elements.Count; i++)
+                {
+                    var currentElement = elements[i];
+                    var finalResult = comboComparer.Compare(currentElement, minElement);
+                    if (finalResult < 0)
+                    {
+                        minElement = currentElement;
+                        index = i;
+                    }
+                }
+
+                elements.RemoveAt(index);
+                yield return minElement;
+            }
+        }
+
+        public IEnumerator<Employee> GetEnumerator()
+        {
+            return Sort(_employees, _comboComparer);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
     public static class LinqExtention
     {
         public static bool IsEmpty<TSource>(this IEnumerable<TSource> sources)
@@ -127,6 +176,17 @@ namespace Lab
                 }
             }
             return result;
+        }
+
+        public static IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(this IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
+        {
+            //bubble sort
+            return MyBuilder.Sort(employees, comboComparer);
+        }
+
+        public static IEnumerable<Employee> JoeyOrder(this IEnumerable<Employee> employees, Func<Employee, string> keySelector)
+        {
+            return new MyBuilder(employees, new CombineKeyCompare(keySelector, Comparer<string>.Default));
         }
     }
 }
