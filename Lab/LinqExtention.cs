@@ -7,20 +7,25 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public class MyOrderedEnumerable : IEnumerable<Employee>
+    public interface ICompareOrdered
+    {
+        MyOrderedEnumerable AppendComparer(Func<Employee, string> keySelector, Comparer<string> keyComparer);
+    }
+
+    public class MyOrderedEnumerable : IEnumerable<Employee>, ICompareOrdered
     {
         private IEnumerable<Employee> _employees;
-        private IComparer<Employee> _comboComparer;
+        private IComparer<Employee> _previousComparer;
 
-        public MyOrderedEnumerable(IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
+        public MyOrderedEnumerable(IEnumerable<Employee> employees, IComparer<Employee> previousComparer)
         {
             _employees = employees;
-            _comboComparer = comboComparer;
+            _previousComparer = previousComparer;
         }
 
         private static IEnumerator<Employee> Sort(IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
         {
-            //_comboComparer = comboComparer;
+            //_previousComparer = previousComparer;
             //_employees = employees;
             var elements = employees.ToList();
 
@@ -46,7 +51,7 @@ namespace Lab
 
         public IEnumerator<Employee> GetEnumerator()
         {
-            return Sort(_employees, _comboComparer);
+            return Sort(_employees, _previousComparer);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -56,13 +61,13 @@ namespace Lab
 
         public MyOrderedEnumerable AppendComparer(CombineKeyCompare combineKeyCompare)
         {
-            return new MyOrderedEnumerable(_employees, new ComboCompare(_comboComparer, combineKeyCompare));
+            return new MyOrderedEnumerable(_employees, new ComboCompare(_previousComparer, combineKeyCompare));
         }
 
-        internal MyOrderedEnumerable AppendComparer(Func<Employee, string> keySelector, Comparer<string> keyComparer)
+        public MyOrderedEnumerable AppendComparer(Func<Employee, string> keySelector, Comparer<string> keyComparer)
         {
             var nextComparer = new CombineKeyCompare(keySelector, keyComparer);
-            return new MyOrderedEnumerable(_employees, new ComboCompare(_comboComparer, nextComparer));
+            return new MyOrderedEnumerable(_employees, new ComboCompare(_previousComparer, nextComparer));
         }
     }
 
