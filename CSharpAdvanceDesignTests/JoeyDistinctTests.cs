@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -21,7 +22,17 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<int> Distinct(IEnumerable<int> numbers)
         {
-            throw new System.NotImplementedException();
+            return new HashSet<int>(numbers);
+            //var hashSet = new HashSet<int>();
+            //var enumerator = numbers.GetEnumerator();
+            //while (enumerator.MoveNext())
+            //{
+            //    var current = enumerator.Current;
+            //    if (hashSet.Add(current))
+            //    {
+            //        yield return current;
+            //    }
+            //}
         }
     }
 }
