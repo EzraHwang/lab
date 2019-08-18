@@ -7,13 +7,9 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public interface ICompareOrdered
+    public interface IMyOrderedEnumerable : IEnumerable<Employee>
     {
         MyOrderedEnumerable CreateOrderedEnumerable(Func<Employee, string> keySelector, Comparer<string> keyComparer);
-    }
-
-    public interface IMyOrderedEnumerable : IEnumerable<Employee>, ICompareOrdered
-    {
     }
 
     public class MyOrderedEnumerable : IMyOrderedEnumerable
