@@ -60,9 +60,9 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyDistinct(IEnumerable<Employee> employees, EmployeeEqualityComparerWithName comparar)
+        private IEnumerable<Employee> JoeyDistinct(IEnumerable<Employee> employees, EmployeeEqualityComparerWithName comparer)
         {
-            var hashSet = new HashSet<Employee>(comparar);
+            var hashSet = new HashSet<Employee>(comparer);
             var enumerator = employees.GetEnumerator();
             while (enumerator.MoveNext())
             {
