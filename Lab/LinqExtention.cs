@@ -181,7 +181,7 @@ namespace Lab
         public static IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(this IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
         {
             //bubble sort
-            return MyBuilder.Sort(employees, comboComparer);
+            return new MyBuilder(employees, comboComparer);
         }
 
         public static IEnumerable<Employee> JoeyOrder(this IEnumerable<Employee> employees, Func<Employee, string> keySelector)
