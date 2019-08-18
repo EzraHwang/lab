@@ -120,14 +120,14 @@ namespace Lab
 
         public static IEnumerable<string> JoeySelect(this IEnumerable<string> urls, Func<string, string> selector)
         {
-            return JoeySelect(urls, selector);
-            //var result = new List<string>();
-            //foreach (var url in urls)
-            //{
-            //    result.Add(selector(url));
-            //}
+            //return JoeySelect(urls, selector);
+            var result = new List<string>();
+            foreach (var url in urls)
+            {
+                result.Add(selector(url));
+            }
 
-            //return result;
+            return result;
         }
 
         public static IEnumerable<TResult> JoeySelect<TResource, TResult>(this IEnumerable<TResource> sources, Func<TResource, int, TResult> predicate)

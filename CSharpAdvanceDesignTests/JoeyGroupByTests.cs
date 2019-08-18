@@ -51,10 +51,10 @@ namespace CSharpAdvanceDesignTests
                     lookup.Add(employee.LastName, new List<Employee>() { employee });
                 }
             }
-            return ConverMyGrouping(lookup);
+            return ConvertMyGrouping(lookup);
         }
 
-        private IEnumerable<IGrouping<string, Employee>> ConverMyGrouping(Dictionary<string, List<Employee>> employees)
+        private IEnumerable<IGrouping<string, Employee>> ConvertMyGrouping(Dictionary<string, List<Employee>> employees)
         {
             var enumerator = employees.GetEnumerator();
             while (enumerator.MoveNext())
