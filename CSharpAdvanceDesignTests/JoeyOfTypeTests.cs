@@ -49,9 +49,16 @@ namespace CSharpAdvanceDesignTests
             //Assert.AreEqual(2, validators.Count());
         }
 
-        private IEnumerable<T> JoeyOfType<T>(IEnumerable values)
+        private IEnumerable<TType> JoeyOfType<TType>(IEnumerable values)
         {
-            throw new System.NotImplementedException();
+            var enumerator = values.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (current.GetType() is TType)
+                {
+                }
+            }
         }
     }
 }
