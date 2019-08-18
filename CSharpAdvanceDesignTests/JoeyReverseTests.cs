@@ -33,6 +33,15 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyReverse(IEnumerable<Employee> employees)
         {
+            return new Stack<Employee>(employees);
+            //var stack = new Stack<Employee>();
+            //var enumerator = employees.GetEnumerator();
+            //while (enumerator.MoveNext())
+            //{
+            //    stack.Push(enumerator.Current);
+            //}
+
+            //return stack;
         }
     }
 }
