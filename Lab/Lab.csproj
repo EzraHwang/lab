@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CombineKeyCompare.cs" />
+    <Compile Include="ComboCompare.cs" />
     <Compile Include="Entities\Card.cs" />
     <Compile Include="Entities\CardKind.cs" />
     <Compile Include="Entities\CardType.cs" />
