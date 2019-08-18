@@ -184,9 +184,15 @@ namespace Lab
             return new MyOrderedEnumerable(employees, comboComparer);
         }
 
-        public static IEnumerable<Employee> JoeyOrder(this IEnumerable<Employee> employees, Func<Employee, string> keySelector)
+        public static IEnumerable<Employee> JoeyOrderBy(this IEnumerable<Employee> employees, Func<Employee, string> keySelector)
         {
             return new MyOrderedEnumerable(employees, new CombineKeyCompare(keySelector, Comparer<string>.Default));
+        }
+
+        public static IEnumerable<Employee> JoeyThenBy(this IEnumerable<Employee> employees,
+            Func<Employee, string> keySelector)
+        {
+            throw new NotImplementedException();
         }
     }
 }
