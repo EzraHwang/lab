@@ -3,6 +3,7 @@ using Lab.Entities;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -46,7 +47,20 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Tuple<string, string>> JoeyJoin(IEnumerable<Employee> employees, IEnumerable<Pet> pets)
         {
-            throw new NotImplementedException();
+            var employeeEnumerator = employees.GetEnumerator();
+            while (employeeEnumerator.MoveNext())
+            {
+                var employee = employeeEnumerator.Current;
+                var petEnumerator = pets.GetEnumerator();
+                while (petEnumerator.MoveNext())
+                {
+                    var pet = petEnumerator.Current;
+                    if (pet.Owner == employee)
+                    {
+                        yield return new Tuple<string, string>(employee.FirstName, pet.Name);
+                    }
+                }
+            }
         }
     }
 }
