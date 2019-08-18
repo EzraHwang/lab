@@ -53,6 +53,11 @@ namespace Lab
         {
             return GetEnumerator();
         }
+
+        public MyOrderedEnumerable AppendComparer(CombineKeyCompare combineKeyCompare)
+        {
+            return new MyOrderedEnumerable(_employees, new ComboCompare(_comboComparer, combineKeyCompare));
+        }
     }
 
     public static class LinqExtention
@@ -184,15 +189,15 @@ namespace Lab
             return new MyOrderedEnumerable(employees, comboComparer);
         }
 
-        public static IEnumerable<Employee> JoeyOrderBy(this IEnumerable<Employee> employees, Func<Employee, string> keySelector)
+        public static MyOrderedEnumerable JoeyOrderBy(this IEnumerable<Employee> employees, Func<Employee, string> keySelector)
         {
             return new MyOrderedEnumerable(employees, new CombineKeyCompare(keySelector, Comparer<string>.Default));
         }
 
-        public static IEnumerable<Employee> JoeyThenBy(this IEnumerable<Employee> employees,
+        public static MyOrderedEnumerable JoeyThenBy(this MyOrderedEnumerable employees,
             Func<Employee, string> keySelector)
         {
-            throw new NotImplementedException();
+            return employees.AppendComparer(new CombineKeyCompare(keySelector, Comparer<string>.Default));
         }
     }
 }
