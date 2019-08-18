@@ -7,12 +7,12 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public class MyBuilder : IEnumerable<Employee>
+    public class MyOrderedEnumerable : IEnumerable<Employee>
     {
         private IEnumerable<Employee> _employees;
         private IComparer<Employee> _comboComparer;
 
-        public MyBuilder(IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
+        public MyOrderedEnumerable(IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
         {
             _employees = employees;
             _comboComparer = comboComparer;
@@ -181,12 +181,12 @@ namespace Lab
         public static IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(this IEnumerable<Employee> employees, IComparer<Employee> comboComparer)
         {
             //bubble sort
-            return new MyBuilder(employees, comboComparer);
+            return new MyOrderedEnumerable(employees, comboComparer);
         }
 
         public static IEnumerable<Employee> JoeyOrder(this IEnumerable<Employee> employees, Func<Employee, string> keySelector)
         {
-            return new MyBuilder(employees, new CombineKeyCompare(keySelector, Comparer<string>.Default));
+            return new MyOrderedEnumerable(employees, new CombineKeyCompare(keySelector, Comparer<string>.Default));
         }
     }
 }
