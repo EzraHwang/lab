@@ -33,7 +33,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Wang"},
             };
 
-            //expected.ToExpectedObject().ShouldMatch(actual);
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         [Test]
