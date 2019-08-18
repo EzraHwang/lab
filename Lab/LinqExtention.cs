@@ -9,10 +9,14 @@ namespace Lab
 {
     public interface ICompareOrdered
     {
-        MyOrderedEnumerable AppendComparer(Func<Employee, string> keySelector, Comparer<string> keyComparer);
+        MyOrderedEnumerable CreateOrderedEnumerable(Func<Employee, string> keySelector, Comparer<string> keyComparer);
     }
 
-    public class MyOrderedEnumerable : IEnumerable<Employee>, ICompareOrdered
+    public interface IMyOrderedEnumerable : IEnumerable<Employee>, ICompareOrdered
+    {
+    }
+
+    public class MyOrderedEnumerable : IMyOrderedEnumerable
     {
         private IEnumerable<Employee> _employees;
         private IComparer<Employee> _previousComparer;
@@ -59,12 +63,12 @@ namespace Lab
             return GetEnumerator();
         }
 
-        public MyOrderedEnumerable AppendComparer(CombineKeyCompare combineKeyCompare)
+        public MyOrderedEnumerable CreateOrderedEnumerable(CombineKeyCompare combineKeyCompare)
         {
             return new MyOrderedEnumerable(_employees, new ComboCompare(_previousComparer, combineKeyCompare));
         }
 
-        public MyOrderedEnumerable AppendComparer(Func<Employee, string> keySelector, Comparer<string> keyComparer)
+        public MyOrderedEnumerable CreateOrderedEnumerable(Func<Employee, string> keySelector, Comparer<string> keyComparer)
         {
             var nextComparer = new CombineKeyCompare(keySelector, keyComparer);
             return new MyOrderedEnumerable(_employees, new ComboCompare(_previousComparer, nextComparer));
@@ -208,8 +212,8 @@ namespace Lab
         public static MyOrderedEnumerable JoeyThenBy(this MyOrderedEnumerable employees,
             Func<Employee, string> keySelector)
         {
-            return employees.AppendComparer(keySelector, Comparer<string>.Default);
-            //return employees.AppendComparer(new CombineKeyCompare(keySelector, Comparer<string>.Default));
+            return employees.CreateOrderedEnumerable(keySelector, Comparer<string>.Default);
+            //return employees.CreateOrderedEnumerable(new CombineKeyCompare(keySelector, Comparer<string>.Default));
         }
     }
 }
