@@ -55,8 +55,10 @@ namespace CSharpAdvanceDesignTests
             while (enumerator.MoveNext())
             {
                 var current = enumerator.Current;
-                if (current.GetType() is TType)
+                //Check if current type is belong to TType, if yes then change current type
+                if (current is TType c)
                 {
+                    yield return c;
                 }
             }
         }
