@@ -35,7 +35,7 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerator<int> MyGroupSum(IEnumerable<Account> accounts)
         {
-            //91 code
+            //91 code master testttt
             //var pageIndex = 0;
             //var pageSize = 3;
             //while (pageSize * pageIndex < accounts.Count())
